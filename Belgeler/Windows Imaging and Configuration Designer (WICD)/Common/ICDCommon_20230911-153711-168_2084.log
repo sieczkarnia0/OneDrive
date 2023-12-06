@@ -1,0 +1,11 @@
+9/11/2023 3:37:11 PM Info ICD Started
+9/11/2023 3:37:22 PM Warning Image customization functionality is disabled because imaging tools are not installed.
+9/11/2023 3:37:22 PM Warning Exception on reading AutoLaunchConfigScenarioId. Klucz 'AutoLaunchConfigScenarioId' nie istnieje w sekcji konfiguracyjnej appSettings.
+9/11/2023 3:37:22 PM Warning Exception on reading SUSPCAriaIngestionKey. Klucz 'SUSPCAriaIngestionKey' nie istnieje w sekcji konfiguracyjnej appSettings.
+9/11/2023 3:37:22 PM Warning Exception on reading ICDWindowTitle. Klucz 'ICDWindowTitle' nie istnieje w sekcji konfiguracyjnej appSettings.
+9/11/2023 3:37:22 PM Warning Exception on reading ICDWindowHeight. Klucz 'ICDWindowHeight' nie istnieje w sekcji konfiguracyjnej appSettings.
+9/11/2023 3:37:22 PM Warning Exception on reading ICDWindowWidth. Klucz 'ICDWindowWidth' nie istnieje w sekcji konfiguracyjnej appSettings.
+9/11/2023 3:37:22 PM Warning Exception on reading ICDWindowMinHeight. Klucz 'ICDWindowMinHeight' nie istnieje w sekcji konfiguracyjnej appSettings.
+9/11/2023 3:37:22 PM Warning Exception on reading ICDWindowMinWidth. Klucz 'ICDWindowMinWidth' nie istnieje w sekcji konfiguracyjnej appSettings.
+9/11/2023 3:37:22 PM Warning Exception on reading ICDWindowState. Klucz 'ICDWindowState' nie istnieje w sekcji konfiguracyjnej appSettings.
+9/11/2023 3:45:12 PM Info Stopping server

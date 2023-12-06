@@ -1,0 +1,21 @@
+{
+  "version": "1.17",
+  "displayName": "operationalLayers",
+  "isVisible": true,
+  "classType": "Operation_Layer",
+  "children": [
+    {
+      "displayName": "my_drawings.kmz",
+      "isVisible": true,
+      "classType": "MyDrawings",
+      "sourceURI": "data\\my_drawings.kmz"
+    },
+    {
+      "displayName": "Moje dane",
+      "isVisible": false,
+      "classType": "WorkSpace_Folder",
+      "id": "my_data",
+      "children": []
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "Version": 3,
+  "Scenarios": [
+    {
+      "Hints": [
+        {
+          "HintPositionInPixel": {
+            "X": 341,
+            "Y": 1800
+          },
+          "HintName": "Beautify the skin",
+          "HelpInfo": "Enhance, smooth, and remove defects",
+          "HintType": "filter",
+          "HintFilter": "SkinSoftenerNNEffect"
+        },
+        {
+          "HintPositionInPixel": {
+            "X": 2050,
+            "Y": 1300
+          },
+          "HintName": "Retouch the face",
+          "HelpInfo": "Easily enhance any facial features",
+          "HintType": "filter",
+          "HintFilter": "FaceEnhancer_vn0_Effect"
+        },
+        {
+          "HintPositionInPixel": {
+            "X": 130,
+            "Y": 1300
+          },
+          "HintName": "Soften the lines",
+          "HelpInfo": "Add glow and light to the portrait",
+          "HintType": "filter",
+          "HintFilter": "GlowOrtonAdjustmentLayer"
+        },
+        {
+          "HintPositionInPixel": {
+            "X": 1875,
+            "Y": 1800
+          },
+          "HintName": "Bring out the details",
+          "HelpInfo": "Balance the highlights and shadows",
+          "HintType": "filter",
+          "HintFilter": "AIEnhanceAdjustmentLayer"
+        }
+      ],
+      "Name": "Portrait Face",
+      "ImageFileName": "Close up portrait tutorial.jpg",
+      "Id": 1
+    },
+    {
+      "Hints": [
+        {
+          "HintPositionInPixel": {
+            "X": 160,
+            "Y": 160
+          },
+          "HintName": "Apply Erase",
+          "HelpInfo": "Clear the scene of unwanted details",
+          "HintType": "filter",
+          "HintFilter": "Erase"
+        }
+      ],
+      "Name": "Erase",
+      "ImageFileName": "Erase tool tutorial.jpg",
+      "Id": 2
+    },
+    {
+      "Hints": [
+        {
+          "HintPositionInPixel": {
+            "X": 160,
+            "Y": 2000
+          },
+          "HintName": "Boost with one slider",
+          "HelpInfo": "Improve overall quality with AI",
+          "HintType": "filter",
+          "HintFilter": "AIEnhanceAdjustmentLayer"
+        },
+        {
+          "HintPositionInPixel": {
+            "X": 160,
+            "Y": 135
+          },
+          "HintName": "Replace the sky",
+          "HelpInfo": "Add drama with a new sky",
+          "HintType": "filter",
+          "HintFilter": "SkyReplacementAdjustmentLayer"
+        }
+      ],
+      "Name": "Landscape",
+      "ImageFileName": "Landscape tutorial.jpg",
+      "Id": 3
+    },
+    {
+      "Hints": [
+        {
+          "HintPositionInPixel": {
+            "X": 160,
+            "Y": 2000
+          },
+          "HintName": "Shape the body",
+          "HelpInfo": "Add or remove volume",
+          "HintType": "filter",
+          "HintFilter": "SlimPeople_vn0_Effect"
+        }
+      ],
+      "Name": "Portrait",
+      "ImageFileName": "Portrait tutorial.JPG",
+      "Id": 4
+    },
+    {
+      "Hints": [
+        {
+          "HintPositionInPixel": {
+            "X": 160,
+            "Y": 135
+          },
+          "HintName": "Apply a Preset from For this Photo",
+          "HelpInfo": "Bring out a fresh style recommended by AI",
+          "HintType": "template"
+        },
+        {
+          "HintPositionInPixel": {
+            "X": 160,
+            "Y": 2000
+          },
+          "HintName": "Export your photo",
+          "HelpInfo": "Choose settings and share with the world",
+          "HintType": "export"
+        }
+      ],
+      "Name": "Template",
+      "ImageFileName": "Presets tutorial.jpg",
+      "Id": 5
+    }
+  ]
+}
+  

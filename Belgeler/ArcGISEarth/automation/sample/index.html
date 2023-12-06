@@ -1,0 +1,263 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>ArcGIS Earth Automation API Sample</title>
+
+    <link rel="shortcut icon" href="./images/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+    <script src="./libs/jquery-3.1.1.min.js"></script>
+    <script src="./examples.js"></script>
+    <script src="./apis.js"></script>
+    <script type="text/javascript">
+        var FIELD_API_ITEM = "ae_api_item";
+        var apiEndpoint = "arcgisearth"
+        var RestServiceUrl = location.origin + "/" + apiEndpoint + "/";
+
+        var selectedApiElement = null;
+
+        function createAPIButton(item) {
+            var itemElem = document.createElement("div");
+            itemElem.setAttribute("class", "api-item");
+            var itemText = document.createElement("div");
+            itemText.setAttribute("class", "api-text");
+            itemText.innerHTML = item.title;
+            itemText.onclick = function () {
+                onApiItemClicked(itemText, item);
+            };
+            itemElem.appendChild(itemText);
+            return itemElem;
+        }
+
+        function listAPIButtons() {
+            var selItem = null;
+            var selObj = null;
+            var panel = document.getElementById("apisPanel");
+            for (var i = 0; i < apis.length; i++) {
+                var item = apis[i];
+                var itemElement = createAPIButton(item);
+                panel.appendChild(itemElement);
+                if (!selItem) {
+                    selItem = itemElement.firstChild;
+                    selObj = item
+                }
+            }
+
+            if (selItem) {
+                onApiItemClicked(selItem, selObj);
+            }
+        }
+
+        function onApiItemClicked(element, itemObj) {
+            if (selectedApiElement) {
+                selectedApiElement.setAttribute("class", "api-text");
+            }
+            element.setAttribute("class", "api-text-selected");
+
+            $("#apiResp").attr("class", "textarea-resp-string");
+            $("#respImg").attr("class", "img-resp-image-collapsed");
+
+            var apiArgsElem = document.getElementById("apiArgs");
+            var btnDiv = document.getElementById("btnDiv");
+            if (itemObj && apiArgsElem && btnDiv) {
+
+                $("#apiResp").val("");
+                $("#inputArea").val("");
+
+                if (itemObj["no_req_params"]) {
+                    apiArgsElem.setAttribute("class", "textarea-req-params-collapsed");
+                    btnDiv.setAttribute("class", "no-params-btn");
+                    $("#inputBorder").attr("class", "textarea-border-in-only-btn");
+                }
+                else {
+                    apiArgsElem.setAttribute("class", "textarea-req-params");
+                    btnDiv.setAttribute("class", "no-params-btn-collapsed");
+                    $("#inputBorder").attr("class", "textarea-border-in");
+                    if (itemObj["args_example"]) {
+                        var inputArea = document.getElementById("inputArea");
+                        if (inputArea) {
+                            if (itemObj.hasOwnProperty('has_request_body')
+                                && itemObj['has_request_body'] === false) {
+                                inputArea.placeholder = "Example:\n\n" + itemObj["args_example"];
+                            }
+                            else {
+                                inputArea.placeholder = "Example:\n\n" + JSON.stringify(itemObj["args_example"], null, 4);
+                            }
+                        }
+                    }
+                }
+            }
+            selectedApiElement = element;
+            selectedApiElement[FIELD_API_ITEM] = itemObj;
+        }
+
+        function clearInput() {
+            var inputArea = document.getElementById("inputArea");
+            if (inputArea) {
+                inputArea.value = "";
+            }
+        }
+
+        function sendRequest() {
+            var inputArea = document.getElementById("inputArea");
+            if (!inputArea) {
+                return;
+            }
+
+            if (inputArea.value == "") {
+                //alert
+                return;
+            }
+
+            if (selectedApiElement[FIELD_API_ITEM]) {
+                invokeAPICall(selectedApiElement[FIELD_API_ITEM], inputArea.value);
+            }
+        }
+
+        function sendNoArgsRequest() {
+            if (selectedApiElement && selectedApiElement[FIELD_API_ITEM]) {
+                invokeAPICall(selectedApiElement[FIELD_API_ITEM], "");
+            }
+        }
+
+        function imageToBase64(data) {
+            var binary = "";
+            for (i = 0; i < data.length; i++) {
+                binary += String.fromCharCode(data.charCodeAt(i) & 255);
+            }
+            return btoa(binary);
+        }
+
+        function invokeAPICall(apiItem, reqData) {
+            $("#apiResp").val("waiting response...");
+
+            var url = RestServiceUrl + apiItem.apiPath;
+
+            if (apiItem.hasOwnProperty('has_request_body')
+                && apiItem['has_request_body'] === false) {
+                url = RestServiceUrl + apiItem.apiPath + "/" + reqData;
+            }
+
+            var settings = {
+                "async": true,
+                "crossDomain": true,
+                "url": url,
+                "method": apiItem["method"],
+                "headers": {
+                    "content-type": apiItem["content-type"],
+                    "cache-control": "no-cache"
+                },
+                "processData": false,
+                "data": reqData,
+                "beforeSend": function (xhr) {
+                    if (apiItem["content-type"].toLowerCase().indexOf("image/") != -1) {
+                        xhr.overrideMimeType('text/plain; charset=x-user-defined');
+                    }
+                },
+                "success": function (result, status, xhr) {
+                    if (xhr.status === 204 || xhr.status === 404) {
+                        var ret = { "result": "Success" };
+                        $("#apiResp").val(JSON.stringify(ret, null, '  '));
+                    }
+                    else {
+                        var contentType = xhr.getResponseHeader('content-type');
+                        if (contentType.indexOf('image/jpeg') != -1) {
+                            $("#apiResp").attr("class", "textarea-resp-string-collapsed");
+                            $("#respImg").attr("class", "img-resp-image");
+                            var imgSrc = "data:image/jpeg;base64," + imageToBase64(result);
+                            $("#respImg").attr("src", imgSrc);
+                        }
+                        else if (contentType.indexOf('application/json') != -1) {
+                            $("#apiResp").attr("class", "textarea-resp-string");
+                            $("#respImg").attr("class", "img-resp-image-collapsed");
+                            $("#apiResp").val(JSON.stringify(result, null, 4));
+                        }
+                        else {
+                            $("#apiResp").attr("class", "textarea-resp-string");
+                            $("#respImg").attr("class", "img-resp-image-collapsed");
+                            $("#apiResp").val(result);
+                        }
+                    }
+                },
+                "error": function (xhr, exception) {
+                    var msg = xhr.responseText;
+                    if (typeof msg === 'undefined') {
+                        if (xhr.status === 0) {
+                            msg = 'Not connect. Please make sure ArcGIS Earth is running and the Automation API is enabled.';
+                        } else if (xhr.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (xhr.status == 500) {
+                            msg = 'Internal server error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        }
+                    }
+                    $("#apiResp").val(msg);
+                }
+            }
+
+            $.ajax(settings).done(function (response) {
+            });
+        }
+    </script>
+</head>
+
+<body onload="listAPIButtons()">
+    <div class="heading-bar">
+        <p class="p-heading">ArcGIS Earth Automation API Sample</p>
+    </div>
+    <div class="panel">
+        <div class="col-left">
+            <div id="apisPanel" class="div-apis-panel">
+                <!--<div class="api-item">
+                    <div class="api-text-selected" onclick="onApiItemClicked(this)">Get Camera</div>
+                </div>
+                <div class="api-item">
+                    <div class="api-text" onclick="onApiItemClicked(this)">Set Camera</div>
+                </div>-->
+            </div>
+        </div>
+
+        <div class="col-middle">
+            <div class="div-vert-avg">
+                <div style="margin-top:40px; margin-left:20px; font-family:Avenir-Demi;font-size:14px;color:#161616;">Input</div>
+                <div id="inputBorder" class="textarea-border-in">
+                    <div id="apiArgs" class="textarea-req-params">
+                        <textarea id="inputArea" spellcheck="false"></textarea>
+                        <div style="display:flex;flex-direction:row;justify-content:flex-end;">
+                            <button class="btn-send" onclick="clearInput()">Clear</button>
+                            <button class="btn-send" style="margin:5px 15px 5px 5px"
+                                onclick="sendRequest()">Send</button>
+                        </div>
+                    </div>
+                    <div id="btnDiv" class="no-params-btn" onclick="sendNoArgsRequest()">
+                        <div class="icon-text-btn">
+                            <img src="./images/send_icon_n.png" width="20" height="24" />
+                            <p class="icon-text-btn-text">Send</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="div-vert-avg">
+                <div style="margin-top: 40px; margin-left:20px; font-family: Avenir-Demi;font-size: 14px;color: #161616;">Output</div>
+                <div class="textarea-border-out">
+                    <textarea id="apiResp" spellcheck="false" style="overflow-y: auto;"></textarea>
+                    <img id="respImg" src="." class="img-resp-image-collapsed" />
+                </div>
+            </div>
+        </div>
+
+        <div class="col-right">
+
+        </div>
+    </div>
+</body>
+
+</html>
